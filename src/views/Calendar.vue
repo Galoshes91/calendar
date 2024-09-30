@@ -31,6 +31,10 @@
 					<AppointmentConfigList />
 				</template>
 
+                <!-- Room/Car Booking list -->
+                <!-- TODO: If condition needed?? -->
+                <ItemBookingList />
+
 				<!-- Trashbin -->
 				<Trashbin v-if="calendarsStore.hasTrashBin" />
 			</template>
@@ -99,12 +103,14 @@ import useSettingsStore from '../store/settings.js'
 import useWidgetStore from '../store/widget.js'
 import { mapStores, mapState } from 'pinia'
 import { mapDavCollectionToCalendar } from '../models/calendar.js'
+import ItemBookingList from '../components/AppNavigation/ItemBookingList.vue'
 
 export default {
 	name: 'Calendar',
 	components: {
 		AppointmentConfigList,
 		CalendarGrid,
+        ItemBookingList,
 		EmptyCalendar,
 		EmbedTopNavigation,
 		Settings,
