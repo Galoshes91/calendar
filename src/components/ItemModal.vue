@@ -2,6 +2,7 @@
     <Modal labelId="RoomCarBooking" size="large" @close="$emit('close')">
         <div class="appointment-config-modal">
             <h2>Girudala room & car booking</h2>
+            <ErrorBanner :message="errorMsg" :is-visible="displayError"/>
             <label>I want to book a: </label>
             <Dropdown v-bind="itemTypeDrp" placeholder="Select type of booking" :label-outside="true"
                 :searchable="false" @option:selected="selectItemType" @close="clearItemType"
@@ -28,8 +29,7 @@
 
             <span class="action-bar">
                 <Button>Cancel</Button>
-                <!-- TODO: validation. See SaveModel func, then emit if valid-->
-                <Button type="primary" :disabled="saveButtonDisabled" @click="$emit('save-booking')">Save</Button>
+                <Button type="primary" :disabled="saveButtonDisabled" @click="saveModal">Save</Button>
             </span>
         </div>
     </Modal>
@@ -37,6 +37,7 @@
 
 <script>
 import { NcModal as Modal, NcSelect as Dropdown, NcDateTimePicker as DatePicker, NcButton as Button } from '@nextcloud/vue'
+import ErrorBanner from './Common/ErrorBanner.vue';
 
 export default {
     name: 'ItemModal',
@@ -44,7 +45,8 @@ export default {
         Modal,
         Dropdown,
         DatePicker,
-        Button
+        Button,
+        ErrorBanner
     },
     data() {
         return {
@@ -75,7 +77,9 @@ export default {
             itemSelected: false,
             startTime: new Date(),
             endTime: new Date(),
-            saveButtonDisabled: true
+            saveButtonDisabled: true,
+            displayError: false,
+            errorMsg: ''
         }
     },
     methods: {
@@ -101,8 +105,20 @@ export default {
                 this.saveButtonDisabled = true
             }
         },
-        saveModal() { // TODO: validation
-
+        saveModal() {
+            const currentDate = Date.now();
+            console.log(this.startTime)
+            if(this.startTime > this.endTime) {
+                this.errorMsg = "Start date/time is after end date/time, please resolve then try again"
+                this.displayError = true;
+            }
+            else if(this.startTime < currentDate || this.endTime < currentDate) {
+                this.errorMsg = `${this.startTime < currentDate ? 'Start' : 'End'} date/time is before the current date/time, please resolve then try again`
+                this.displayError = true
+            }
+            else {
+                this.$emit('save-booking')
+            }
         }
     }
 }
