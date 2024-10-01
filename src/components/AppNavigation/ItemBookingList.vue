@@ -15,6 +15,7 @@
         <ItemModal 
             v-if="showModal"
             @close="closeModal"
+            @save-booking="saveModel"
         ></ItemModal>
     </div>
 </template>
@@ -44,6 +45,9 @@ export default {
     methods: {
         closeModal() {
             this.showModal = false
+        },
+        saveModel() {
+            this.showModal = false;
         }
     }
 }
