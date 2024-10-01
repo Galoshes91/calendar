@@ -33,6 +33,7 @@
 
                 <!-- Room/Car Booking list -->
                 <!-- TODO: If condition needed?? -->
+                <br/>
                 <ItemBookingList />
 
 				<!-- Trashbin -->
