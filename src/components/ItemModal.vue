@@ -38,6 +38,9 @@
 <script>
 import { NcModal as Modal, NcSelect as Dropdown, NcDateTimePicker as DatePicker, NcButton as Button } from '@nextcloud/vue'
 import ErrorBanner from './Common/ErrorBanner.vue';
+import {
+	findAllCalendars,
+} from '../services/caldavService.js'
 
 export default {
     name: 'ItemModal',
@@ -105,9 +108,11 @@ export default {
                 this.saveButtonDisabled = true
             }
         },
-        saveModal() {
+        async saveModal() {
             const currentDate = Date.now();
-            console.log(this.startTime)
+            
+            
+            console.log(await findAllCalendars());
             if(this.startTime > this.endTime) {
                 this.errorMsg = "Start date/time is after end date/time, please resolve then try again"
                 this.displayError = true;
