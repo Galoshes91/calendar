@@ -334,6 +334,9 @@ export default {
 					order: 0,
 				})
 			}
+			await this.createCalendarIfNotExists(calendars, 'Housing program')
+			await this.createCalendarIfNotExists(calendars, 'Car bookings')
+			await this.createCalendarIfNotExists(calendars, 'Room bookings')
 
 			this.loadingCalendars = false
 		}
@@ -370,6 +373,21 @@ export default {
 			const locale = await loadMomentLocalization()
 			this.settingsStore.setMomentLocale({ locale })
 		},
+
+		/**
+		 * If the given calendar does not exist (using the display name), creates it
+		 */
+		async createCalendarIfNotExists(calendars, calendarName) {
+			const foundCal = calendars.find((cl) => cl.displayName === calendarName)
+
+			if(!foundCal) {
+				await this.calendarsStore.appendCalendar({
+						displayName: calendarName,
+						color: uidToHexColor(this.$t('calendar', calendarName)),
+						order: 0,
+					})
+			}
+		}
 	},
 }
 </script>
