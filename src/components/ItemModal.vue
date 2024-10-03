@@ -38,9 +38,9 @@
 <script>
 import { NcModal as Modal, NcSelect as Dropdown, NcDateTimePicker as DatePicker, NcButton as Button } from '@nextcloud/vue'
 import ErrorBanner from './Common/ErrorBanner.vue';
-import {
-	findAllCalendars,
-} from '../services/caldavService.js'
+import EditorMixin from '../mixins/EditorMixin.js';
+import useCalendarObjectInstanceStore from '../store/calendarObjectInstance.js'
+import useSettingsStore from '../store/settings.js'
 
 export default {
     name: 'ItemModal',
@@ -109,10 +109,8 @@ export default {
             }
         },
         async saveModal() {
-            const currentDate = Date.now();
-            
-            
-            console.log(await findAllCalendars());
+            const currentDate = Date.now()
+
             if(this.startTime > this.endTime) {
                 this.errorMsg = "Start date/time is after end date/time, please resolve then try again"
                 this.displayError = true;
@@ -122,6 +120,16 @@ export default {
                 this.displayError = true
             }
             else {
+                const startUnix = Math.floor(this.startDate / 1000)
+                const endUnix = Math.floor(this.endDate / 1000)
+                const calendarObjectInstanceStore = useCalendarObjectInstanceStore()
+                const settingsStore = useSettingsStore()
+
+                const isAllDay = false;
+                const timezoneId = settingsStore.getResolvedTimezone
+                await calendarObjectInstanceStore.getCalendarObjectInstanceForNewEvent({ isAllDay, startUnix, endUnix, timezoneId })
+
+                console.log(this.calendarObject)
                 this.$emit('save-booking')
             }
         }
