@@ -51,6 +51,9 @@ export default {
         Button,
         ErrorBanner
     },
+    mixins: [
+		EditorMixin,
+	],
     data() {
         return {
             itemTypeDrp: {
@@ -120,16 +123,20 @@ export default {
                 this.displayError = true
             }
             else {
-                const startUnix = Math.floor(this.startDate / 1000)
-                const endUnix = Math.floor(this.endDate / 1000)
+                const startUnix = Math.floor(this.startTime / 1000)
+                const endUnix = Math.floor(this.endTime / 1000)
                 const calendarObjectInstanceStore = useCalendarObjectInstanceStore()
                 const settingsStore = useSettingsStore()
 
                 const isAllDay = false;
                 const timezoneId = settingsStore.getResolvedTimezone
-                await calendarObjectInstanceStore.getCalendarObjectInstanceForNewEvent({ isAllDay, startUnix, endUnix, timezoneId })
 
-                console.log(this.calendarObject)
+                await calendarObjectInstanceStore.getCalendarObjectInstanceForNewEvent({ isAllDay, startUnix, endUnix, timezoneId })
+                this.updateStartDate(this.startTime)
+                this.updateEndDate(this.endTime)
+                this.updateTitle(this.item)
+
+                await this.save(false)
                 this.$emit('save-booking')
             }
         }
