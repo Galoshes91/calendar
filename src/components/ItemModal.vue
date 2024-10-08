@@ -136,8 +136,17 @@ export default {
                 this.updateEndDate(this.endTime)
                 this.updateTitle(this.item)
 
-                await this.save(false)
-                this.$emit('save-booking')
+                const calendarName = this.itemType === 'Car' ? 'Car bookings' : 'Room bookings';
+                const calendarId = this.calendars.find((c) => {
+                    return c.displayName === calendarName
+                })
+
+                if(calendarId) {
+                    this.updateCalendarId(calendarId.id)
+    
+                    await this.save(false)
+                    this.$emit('save-booking')
+                }
             }
         }
     }

@@ -576,6 +576,11 @@ export default {
 				location,
 			})
 		},
+
+        updateCalendarId(calendarId) {
+            this.calendarObjectInstanceStore.changeCalendarId(calendarId)
+        },
+
 		/**
 		 * Updates the start date of this event
 		 *

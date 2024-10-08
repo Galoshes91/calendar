@@ -1508,6 +1508,10 @@ export default defineStore('calendarObjectInstance', {
 			}
 		},
 
+        changeCalendarId(calendarId) {
+            this.calendarObject.calendarId = calendarId
+        },
+
 		/**
 		 *
 		 * @param {object} data The destructuring object for data
